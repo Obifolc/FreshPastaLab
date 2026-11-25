@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="it"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fresh Pasta Lab</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E%F0%9F%8C%BE%3C/text%3E%3C/svg%3E">
+<meta name="apple-mobile-web-app-title" content="Pasta Lab"><meta name="apple-mobile-web-app-capable" content="yes">
+<style>
+:root{--g:#172D28;--o:#D7B77A;--iv:#ECE6D6;--w:#FFFFFF;--t:#0E1D19;--s:#434B48;--bd:#B3AA92;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--iv:#0b1311;--w:#24382F;--t:#FFFFFF;--s:#C9D2CE;--bd:#587368}}
+:root[data-theme="dark"]{--iv:#0b1311;--w:#24382F;--t:#FFFFFF;--s:#C9D2CE;--bd:#587368}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--iv);color:var(--t);font:18px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+header{background:var(--g);color:#F3EFE6;padding:26px 20px 22px;font-family:Georgia,"Times New Roman",serif}
+header h1{margin:0 0 4px;font-size:32px;letter-spacing:.5px}
+.gr{font:700 36px Georgia,serif;margin:26px 0 6px}.gs{font:18px system-ui,sans-serif;opacity:.85}.wh{width:40px;height:40px;flex:none;stroke:#D7B77A;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+header small{color:var(--o);font-size:15px;letter-spacing:2px;font-family:system-ui,sans-serif}
+main{max-width:760px;margin:0 auto;padding:20px 16px 40px}
+h2{margin:10px 0 14px;font:700 27px Georgia,"Times New Roman",serif}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.tile{background:var(--w);border:1px solid var(--bd);border-radius:20px;padding:22px 14px;font:700 19px Georgia,serif;color:var(--t);text-align:left;min-height:150px;cursor:pointer;overflow-wrap:break-word;hyphens:auto;box-shadow:0 1px 4px rgba(23,45,40,.2)}
+.tile span{display:block;font-size:36px;margin-bottom:10px}
+.tile i{opacity:1}.tile b{color:#a63a25}.tile svg{width:36px;height:36px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:block}
+.tile i{display:block;font:16px system-ui,sans-serif;color:var(--s);font-style:normal;margin-top:4px}
+.c{background:var(--w);border:1px solid var(--bd);border-radius:18px;padding:18px;margin:0 0 14px}
+.s{color:var(--s);font:16px/1.4 system-ui,sans-serif}
+.tag{background:var(--o);color:#172D28;border-radius:6px;padding:1px 7px;font:700 14px system-ui,sans-serif}
+button,.b{font:600 18px system-ui,sans-serif;border:0;border-radius:14px;padding:15px 22px;min-height:52px;cursor:pointer;background:var(--o);color:#172D28;margin:5px 8px 5px 0}
+button.g{background:transparent;border:1px solid var(--bd);color:var(--t)}
+.row{display:flex;flex-wrap:wrap;margin-top:6px}
+label{display:block;font:600 16px system-ui,sans-serif;color:var(--t);margin:16px 0 0}
+input,select,textarea{width:100%;font:18px system-ui,sans-serif;padding:14px;border:1px solid var(--bd);border-radius:12px;background:var(--iv);color:var(--t);margin-top:6px}
+textarea{min-height:120px}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font:17px system-ui,sans-serif}
+th,td{text-align:left;padding:12px 8px;border-bottom:1px solid var(--bd)}
+td input{margin:0;padding:10px;min-width:130px}
+.warn{color:#b3402a;font-weight:600}
+.ing{border:1px solid var(--bd);border-radius:14px;padding:12px;margin:10px 0}
+.ing>input{margin:0}
+.ir{display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap}
+.ir input.iq{flex:1 1 90px;width:auto;min-width:90px;margin:0}
+.ir select{flex:0 0 auto;width:auto;margin:0;padding:14px 10px}
+.ia{display:flex;align-items:center;gap:6px;margin:0;white-space:nowrap;font-weight:500}
+.ia input{width:auto;margin:0;min-width:0;transform:scale(1.3)}
+.ix{margin:0 0 0 auto;padding:10px 16px;min-height:48px}
+#pr{display:none}
+.lab{border:1px solid #000;padding:3mm;color:#000;background:#fff;font:11px/1.3 Arial,sans-serif}
+.lab h3{margin:0 0 2mm;font-size:15px}
+@media print{#app{display:none}#pr{display:block;color:#000;background:#fff;font-family:Arial,sans-serif}body{background:#fff}:root{padding:0}}
+</style></head>
+<body>
+<div id="app"></div><div id="pr"></div>
+<script>
+const $=s=>document.querySelector(s);
+let S={ric:[],lot:[],abb:[],mag:[]};
+try{S=Object.assign(S,JSON.parse(localStorage.getItem('fpl')||'{}'))}catch(x){}
+const save=()=>{try{localStorage.setItem('fpl',JSON.stringify(S))}catch(x){alert('Impossibile salvare su questo dispositivo.')}};
+const e=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const nf=n=>(+n).toLocaleString('it-IT',{maximumFractionDigits:3});
+const td=()=>new Date().toISOString().slice(0,10);
+const df=d=>d?d.split('-').reverse().join('/'):'';
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+const val=i=>$('#'+i).value;
+const UN=['kg','g','l','ml','pz','conf'];
+const conv=(q,a,b)=>{if(a==b)return q;const m={kg:['m',1000],g:['m',1],l:['v',1000],ml:['v',1],pz:['p',1],conf:['c',1]};return m[a][0]==m[b][0]?q*m[a][1]/m[b][1]:null};
+let V='home',P=null;
+const go=(v,p)=>{V=v;P=p;render();scrollTo(0,0)};
+const bar=(t,x='')=>`<h2>${t}</h2>${x}`;
+const F=(l,i,v='',t='text')=>`<label>${l}<input id="${i}" type="${t}" value="${e(v)}"></label>`;
+const U=(i,v)=>`<select id="${i}">${UN.map(u=>`<option ${u==v?'selected':''}>${u}</option>`).join('')}</select>`;
+const pr=(h,name,css='')=>{let st=document.getElementById('ps');if(!st){st=document.createElement('style');st.id='ps';document.head.appendChild(st)}st.textContent=css;document.title=name||'Fresh Pasta Lab';$('#pr').innerHTML=h;setTimeout(()=>{print();document.title='Fresh Pasta Lab'},100)};
+
+const dlg=(msg,conf)=>new Promise(res=>{const d=document.createElement('div');d.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:20px;z-index:999';d.innerHTML='<div class="c" style="max-width:440px;width:100%;margin:0"><p style="white-space:pre-wrap;margin:0 0 8px">'+e(msg)+'</p><div class="row"><button class="y">'+(conf?'Conferma':'OK')+'</button>'+(conf?'<button class="g n">Annulla</button>':'')+'</div></div>';document.body.appendChild(d);d.querySelector('.y').onclick=()=>{d.remove();res(true)};const n=d.querySelector('.n');if(n)n.onclick=()=>{d.remove();res(false)}});
+const ask=m=>dlg(m,true);
+window.alert=m=>{dlg(m,false)};
+const ic=p=>`<svg viewBox="0 0 24 24">${p}</svg>`;
+const IC={ric:ic('<path d="M12 6.5C10 5 7 4.5 3.5 5v13c3.5-.5 6.5 0 8.5 1.5 2-1.5 5-2 8.5-1.5V5C17 4.5 14 5 12 6.5zM12 6.5v13"/>'),lot:ic('<path d="M5 5v14M8.5 5v14M12 5v14M15.5 5v14M19 5v14"/>'),abb:ic('<path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9M9.5 4.5L12 6.5l2.5-2M9.5 19.5l2.5-2 2.5 2"/>'),mag:ic('<path d="M3 10l9-6 9 6v10H3zM7 20v-6h10v6M7 17h10"/>')};
+const views={
+home:()=>{const in7=new Date(Date.now()+7*864e5).toISOString().slice(0,10),t=td();
+const sc=S.mag.filter(m=>m.scad&&m.scad<=in7&&m.q>0).length,lt=S.lot.filter(l=>l.prod==t).length;
+const T=(v,i,n,s)=>`<button class="tile t-${v}" onclick="go('${v}')"><span>${i}</span>${n}<i>${s}</i></button>`;
+return `<div class="grid">${T('ric',IC.ric,'Ricette',S.ric.length+' salvate')}${T('lot',IC.lot,'Lotti di produzione',lt+' oggi · '+S.lot.length+' totali')}${T('abb',IC.abb,'Abbattimento',S.abb.length+' schede')}${T('mag',IC.mag,'Magazzino',sc?'<b class=warn>'+sc+' in scadenza</b>':S.mag.length+' carichi')}</div>
+<h2 style="margin-top:20px">Ultimi lotti</h2>${S.lot.slice(-5).reverse().map(l=>`<div class="c" onclick="go('lotV','${l.id}')"><b>${e(l.code)}</b><div class="s">${e(l.nome)} · ${nf(l.kg)} kg · scade ${df(l.scad)}</div></div>`).join('')||'<p class="s">Nessun lotto ancora. Parti da una ricetta.</p>'}
+<h2 style="margin-top:20px">Copia di sicurezza</h2><p class="s">I dati sono già salvati in questo browser. Con la copia di sicurezza ottieni un file da conservare nel dispositivo o da spostare su un altro.</p><div class="row"><button onclick="bk()">Salva copia sul dispositivo</button><button class="g" onclick="$('#rf').click()">Ripristina da file</button></div><input id="rf" type="file" accept=".json" style="display:none" onchange="rs(this)">`},
+
+ric:()=>bar('Ricette',`<button onclick="go('ricF')">+ Nuova ricetta</button>`)+(S.ric.map(r=>`<div class="c"><b>${e(r.nome)}</b> <span class="tag">${e(r.sigla)}</span><div class="s">${r.ingr.length} ingredienti · base ${nf(r.rif)} kg</div><div class="row"><button onclick="go('ricU','${r.id}')">Produci</button><button class="g" onclick="go('ricF','${r.id}')">Modifica</button><button class="g" onclick="delRic('${r.id}')">Elimina</button></div></div>`).join('')||'<p class="s">Nessuna ricetta. Inserisci la tua prima ricetta.</p>'),
+
+ricF:id=>{const r=S.ric.find(x=>x.id==id)||{ingr:[]};
+return bar(id?'Modifica ricetta':'Nuova ricetta')+`<div class="c">${F('Nome prodotto','rn',r.nome)}${F('Sigla (es. PF)','rs',r.sigla)}${F('Impasto di riferimento (kg)','rr',r.rif||1,'number')}
+<label>Ingredienti</label><div id="il">${(r.ingr.length?r.ingr:[{}]).map(ingRow).join('')}</div>
+<datalist id="ingdl">${[...new Set(S.mag.map(m=>m.nome))].map(n=>`<option value="${e(n)}">`).join('')}</datalist>
+<button type="button" class="g" onclick="addIng()">+ Aggiungi ingrediente</button>
+<label>Procedimento<textarea id="rp">${e(r.proc)}</textarea></label>
+<div class="row"><button onclick="saveRic('${id||''}')">Salva ricetta</button><button class="g" onclick="go('ric')">Annulla</button></div></div>`},
+
+ricU:id=>{const r=S.ric.find(x=>x.id==id);
+return bar('Produci '+e(r.nome))+`<div class="c">${F('Quanti kg di prodotto?','kg','','number')}${F('Data di scadenza','sc','','date')}${F('Operatore','op')}
+<div class="tw" id="pv"></div><div class="row"><button onclick="mkLot('${id}')">Conferma e crea lotto</button><button class="g" onclick="go('ric')">Annulla</button></div></div>
+<script>document.getElementById('kg').oninput=()=>{const f=(+val('kg')||0)/${r.rif};$('#pv').innerHTML='<table>'+S.ric.find(x=>x.id=='${id}').ingr.map(i=>'<tr><td>'+e(i.n)+'</td><td><b>'+nf(i.q*f)+' '+i.u+'</b></td></tr>').join('')+'</table>'}<\/script>`},
+
+lot:()=>bar('Lotti di produzione')+`<div class="c"><label style="margin-top:0">Tabella del mese<input id="lm" type="month" value="${td().slice(0,7)}"></label><div class="row"><button onclick="prMeseLot()">Stampa tabella lotti del mese</button></div></div>`+`<input id="q" placeholder="Cerca prodotto, lotto, operatore, materia prima…" oninput="fl()" value="${e(window.LQ||'')}"><div id="ll" style="margin-top:10px">${lotList(window.LQ||'')}</div>`,
+
+lotV:id=>{const l=S.lot.find(x=>x.id==id);const ab=S.abb.filter(a=>a.lotId==id);
+return bar(e(l.code))+`<div class="c"><b>${e(l.nome)}</b><div class="s">Prodotto ${df(l.prod)} · scade ${df(l.scad)} · ${nf(l.kg)} kg</div>
+<div class="tw"><table><tr><th>Ingrediente</th><th>Quantità</th><th>Lotto fornitore</th></tr>${l.ingr.map((i,k)=>`<tr><td>${e(i.n)}${i.al?' <span class=tag>allergene</span>':''}</td><td>${nf(i.q)} ${i.u}</td><td><input id="lf${k}" value="${e(i.lf)}" ${l.scaricato?'disabled':''}></td></tr>`).join('')}</table></div>
+${F('Operatore','lo',l.op)}<label>Annotazioni<textarea id="ln">${e(l.note)}</textarea></label>
+<label>Ingredienti in etichetta (separati da virgola, modificabili)<textarea id="le">${e(l.etich)}</textarea></label>
+<label>Formato etichetta<select id="lz"><option value="60x40">60 × 40 mm</option><option value="80x50">80 × 50 mm</option><option value="100x60">100 × 60 mm</option></select></label>
+<div class="row"><button onclick="saveLot('${id}');go('home')">Salva scheda</button><button onclick="prScheda('${id}')">Stampa scheda</button><button onclick="prEt('${id}')">Stampa etichetta</button></div>
+<div class="row"><button class="g" onclick="scarica('${id}')" ${l.scaricato?'disabled':''}>${l.scaricato?'Magazzino già scaricato':'Scarica magazzino'}</button><button class="g" onclick="go('abbF','${id}')">Nuovo abbattimento</button><button class="g" style="color:#b3402a;border-color:#b3402a" onclick="delLot('${id}')">Elimina lotto</button></div></div>
+<h2>Abbattimenti collegati</h2>${ab.map(a=>`<div class="c">${a.tipo} · ${df(a.data)} · ${nf(a.temp)} °C · ${e(a.op)}</div>`).join('')||'<p class="s">Nessuno.</p>'}`},
+
+abb:()=>bar('Abbattimento',`<button onclick="go('abbF')">+ Nuova scheda</button><input id="q" placeholder="Cerca prodotto o lotto" oninput="fa()">`)+`<div class="c"><label style="margin-top:0">Tabella del mese<input id="am" type="month" value="${td().slice(0,7)}"></label><div class="row"><button onclick="prMeseAbb()">Stampa tabella abbattimenti del mese</button></div></div>`+'<div id="al" style="margin-top:10px">'+abbList('')+'</div>',
+
+abbF:id=>{const l=S.lot.find(x=>x.id==id);
+return bar('Scheda di abbattimento')+`<div class="c"><label>Prodotto<input id="ap" readonly value="${e(l?l.nome:'')}"></label>
+<label>Lotto personale<input id="al" list="dl" value="${e(l?l.code:'')}" oninput="pick()" placeholder="Cerca lotto"></label><datalist id="dl">${S.lot.map(x=>`<option value="${e(x.code)}">`).join('')}</datalist>
+<label>Tipo di abbattimento<select id="at"><option>Positivo</option><option>Negativo</option></select></label>${F('Data abbattimento','ad',td(),'date')}${F('Temperatura (°C)','atp','','number')}${F('Operatore','ao')}
+<div class="row"><button onclick="saveAbb()">Salva scheda</button><button class="g" onclick="go('abb')">Annulla</button></div></div>`},
+
+mag:()=>bar('Magazzino materie prime',`<button onclick="go('magF')">+ Nuovo carico</button>`)+(S.mag.length?`<div class="tw"><table><tr><th>Materia prima</th><th>Lotto</th><th>Giacenza</th><th>Scadenza</th><th>€</th></tr>${[...S.mag].sort((a,b)=>a.nome.localeCompare(b.nome)).map(m=>`<tr><td>${e(m.nome)}<div class="s">${e(m.forn)} · carico ${df(m.carico)}</div></td><td>${e(m.lotto)}</td><td>${nf(m.q)} ${m.u}</td><td class="${m.scad&&m.scad<=td()?'warn':''}">${df(m.scad)}</td><td>${nf(m.prezzo)}</td></tr>`).join('')}</table></div>`:'<p class="s">Nessun carico registrato.</p>'),
+
+magF:()=>bar('Nuovo carico')+`<div class="c">${F('Materia prima','mn')}${F('Fornitore','mf')}${F('Quantità','mq','','number')}<label>Unità di misura${U('mu','kg')}</label>${F('Lotto fornitore','ml')}${F('Data di carico','mc',td(),'date')}${F('Data di scadenza','ms','','date')}${F('Prezzo di acquisto (€)','mp','','number')}
+<div class="row"><button onclick="saveMag()">Registra carico</button><button class="g" onclick="go('mag')">Annulla</button></div></div>`
+};
+
+function render(){$('#app').innerHTML=`<header><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px"><div><h1>FRESH PASTA LAB</h1><small>ARTISANAL FOOD MANAGEMENT</small></div><svg class="wh" viewBox="0 0 24 24"><path d="M12 21V8M12 8c-2-.5-3-2-3-4 2 .5 3 2 3 4zM12 8c2-.5 3-2 3-4-2 .5-3 2-3 4zM12 13c-2-.5-3.5-2-3.5-4 2 .5 3.5 2 3.5 4zM12 13c2-.5 3.5-2 3.5-4-2 .5-3.5 2-3.5 4zM12 18c-2-.5-3.5-2-3.5-4 2 .5 3.5 2 3.5 4zM12 18c2-.5 3.5-2 3.5-4-2 .5-3.5 2-3.5 4z"/></svg></div>${V=='home'?`<div class="gr">${(h=>h<13?'Buongiorno!':h<18?'Buon pomeriggio!':'Buonasera!')(new Date().getHours())}</div><div class="gs">Benvenuto nel tuo laboratorio digitale.</div>`:''}</header><main>${V!='home'?`<button class="g" onclick="go('${['lotV'].includes(V)?'lot':['ricF','ricU'].includes(V)?'ric':['abbF'].includes(V)?'abb':['magF'].includes(V)?'mag':'home'}')">‹ Indietro</button>`:''}${views[V](P)}</main>`;
+ if(V=='ricU'){const s=document.createElement('script');s.textContent=document.querySelector('#app script')?.textContent;}}
+const _r=render;render=function(){_r();const sc=$('#app main script');if(sc){const t=sc.textContent;sc.remove();new Function(t)()}};
+
+function ingRow(i={}){return `<div class="ing"><input class="in" placeholder="Ingrediente (es. Farina)" list="ingdl" value="${e(i.n)}"><div class="ir"><input class="iq" type="number" inputmode="decimal" step="any" min="0" placeholder="Quantità" value="${i.q!=null?e(i.q):''}"><select class="iu">${UN.map(u=>`<option ${u==(i.u||'g')?'selected':''}>${u}</option>`).join('')}</select><label class="ia"><input type="checkbox" class="ial" ${i.al?'checked':''}> Allergene</label><button type="button" class="g ix" aria-label="Rimuovi ingrediente" onclick="this.closest('.ing').remove()">✕</button></div></div>`}
+function addIng(){const l=$('#il');l.insertAdjacentHTML('beforeend',ingRow());l.lastElementChild.querySelector('.in').focus()}
+const mese=m=>{const[y,mm]=m.split('-');return new Date(y,mm-1,1).toLocaleDateString('it-IT',{month:'long',year:'numeric'})};
+const TS='width:100%;font-size:12px';
+function prMeseLot(){const m=val('lm');if(!m)return alert('Scegli il mese.');
+const L=S.lot.filter(l=>(l.prod||'').slice(0,7)==m).sort((a,b)=>a.prod.localeCompare(b.prod)||a.code.localeCompare(b.code));
+if(!L.length)return alert('Nessun lotto in questo mese.');
+pr(`<h2>Lotti di produzione · ${mese(m)}</h2><table border=1 cellspacing=0 cellpadding=5 style="${TS}"><tr><th>Data</th><th>Lotto</th><th>Prodotto</th><th>Kg</th><th>Scadenza</th><th>Operatore</th><th>Ingredienti (lotto fornitore)</th></tr>${L.map(l=>`<tr><td>${df(l.prod)}</td><td>${e(l.code)}</td><td>${e(l.nome)}</td><td>${nf(l.kg)}</td><td>${df(l.scad)}</td><td>${e(l.op)}</td><td>${l.ingr.map(i=>e(i.n)+(i.lf?' ('+e(i.lf)+')':'')).join(', ')}</td></tr>`).join('')}</table>`,'Lotti '+m,'@page{size:A4 landscape;margin:10mm}body{margin:0}th{background:#eee}')}
+function prMeseAbb(){const m=val('am');if(!m)return alert('Scegli il mese.');
+const A=S.abb.filter(a=>(a.data||'').slice(0,7)==m).sort((a,b)=>a.data.localeCompare(b.data)||a.code.localeCompare(b.code));
+if(!A.length)return alert('Nessun abbattimento in questo mese.');
+pr(`<h2>Abbattimenti · ${mese(m)}</h2><table border=1 cellspacing=0 cellpadding=5 style="${TS}"><tr><th>Data</th><th>Lotto</th><th>Prodotto</th><th>Tipo</th><th>Temperatura (°C)</th><th>Operatore</th></tr>${A.map(a=>`<tr><td>${df(a.data)}</td><td>${e(a.code)}</td><td>${e(a.prodotto)}</td><td>${e(a.tipo)}</td><td>${nf(a.temp)}</td><td>${e(a.op)}</td></tr>`).join('')}</table>`,'Abbattimenti '+m,'@page{size:A4 landscape;margin:10mm}body{margin:0}th{background:#eee}')}
+async function delLot(id){const l=S.lot.find(x=>x.id==id);if(!l)return;
+if(await ask('Eliminare il lotto '+l.code+'?'+(l.scaricato?'\n\nIl magazzino già scaricato NON viene ripristinato.':'')+'\n\nLe schede di abbattimento collegate restano archiviate.')){S.lot=S.lot.filter(x=>x.id!=id);save();go('lot')}}
+async function delAbb(id){if(await ask('Eliminare questa scheda di abbattimento?')){S.abb=S.abb.filter(x=>x.id!=id);save();render()}}
+async function delRic(id){if(await ask('Eliminare la ricetta? I lotti già creati restano archiviati.')){S.ric=S.ric.filter(r=>r.id!=id);save();render()}}
+function saveRic(id){const nome=val('rn').trim(),sigla=val('rs').trim().toUpperCase();if(!nome||!sigla||!(+val('rr')>0))return alert('Inserisci nome, sigla e impasto di riferimento.');
+const ingr=[...document.querySelectorAll('#il .ing')].map(d=>({n:d.querySelector('.in').value.trim(),q:parseFloat(String(d.querySelector('.iq').value).replace(',','.'))||0,u:d.querySelector('.iu').value,al:d.querySelector('.ial').checked})).filter(x=>x.n);
+if(!ingr.length)return alert('Aggiungi almeno un ingrediente.');
+const r={id:id||uid(),nome,sigla,rif:+val('rr'),ingr,proc:val('rp')};
+if(id)S.ric=S.ric.map(x=>x.id==id?r:x);else S.ric.push(r);save();go('ric')}
+function mkLot(rid){const r=S.ric.find(x=>x.id==rid),kg=+val('kg');if(!(kg>0))return alert('Indica quanti kg vuoi produrre.');if(!val('sc'))return alert('Indica la data di scadenza.');
+const d=new Date(),p=n=>String(n).padStart(2,'0'),pre='L '+r.sigla+p(d.getDate())+p(d.getMonth()+1)+p(d.getFullYear()%100)+'-';
+const n=Math.max(0,...S.lot.filter(l=>l.code.startsWith(pre)).map(l=>parseInt(l.code.slice(pre.length))||0))+1,f=kg/r.rif;
+const l={id:uid(),code:pre+String(n).padStart(3,'0'),rid,nome:r.nome,kg,prod:td(),scad:val('sc'),op:val('op'),note:'',scaricato:false,ingr:r.ingr.map(i=>({...i,q:i.q*f,lf:''})),etich:r.ingr.map(i=>i.n).join(', ')};
+S.lot.push(l);save();go('lotV',l.id)}
+function lotList(q){q=q.toLowerCase();const m=S.lot.filter(l=>[l.code,l.nome,l.op,l.prod,df(l.prod),...l.ingr.map(i=>i.n+' '+i.lf)].join(' ').toLowerCase().includes(q));
+return m.slice().reverse().map(l=>`<div class="c" onclick="go('lotV','${l.id}')"><b>${e(l.code)}</b> ${e(l.nome)}<div class="s">${df(l.prod)} · scade ${df(l.scad)} · ${e(l.op)}</div></div>`).join('')||'<p class="s">Nessun lotto trovato.</p>'}
+function fl(){window.LQ=val('q');$('#ll').innerHTML=lotList(window.LQ)}
+function saveLot(id,q){const l=S.lot.find(x=>x.id==id);if(!l.scaricato)l.ingr.forEach((i,k)=>i.lf=val('lf'+k).trim());l.op=val('lo');l.note=val('ln');l.etich=val('le');save();if(!q)alert('Scheda salvata.')}
+function prScheda(id){saveLot(id,1);const l=S.lot.find(x=>x.id==id);pr(`<h2>Scheda di produzione ${e(l.code)}</h2><p><b>${e(l.nome)}</b><br>Produzione ${df(l.prod)} · Scadenza ${df(l.scad)}<br>Quantità prodotta: ${nf(l.kg)} kg · Operatore: ${e(l.op)}</p><table border=1 cellspacing=0 cellpadding=5 style="width:100%"><tr><th>Ingrediente</th><th>Quantità</th><th>Lotto fornitore</th></tr>${l.ingr.map(i=>`<tr><td>${e(i.n)}</td><td>${nf(i.q)} ${i.u}</td><td>${e(i.lf)}</td></tr>`).join('')}</table><p>Annotazioni: ${e(l.note)}</p>`,'Scheda produzione '+l.code)}
+function prEt(id){saveLot(id,1);const l=S.lot.find(x=>x.id==id),[w,h]=val('lz').split('x'),al=l.ingr.filter(i=>i.al).map(i=>i.n.toLowerCase());
+const ing=l.etich.split(',').map(x=>x.trim()).filter(Boolean).map(x=>al.includes(x.toLowerCase())?`<b><u>${e(x.toUpperCase())}</u></b>`:e(x)).join(', ');
+pr(`<div class="lab" style="width:${w}mm;min-height:${h}mm"><h3>${e(l.nome)}</h3>Lotto: <b>${e(l.code)}</b><br>Prodotto il: ${df(l.prod)} · Da consumare entro: <b>${df(l.scad)}</b><br><br>Ingredienti: ${ing}</div>`,'Etichetta '+l.code,`@page{size:${w}mm ${h}mm;margin:0}body{margin:0}`)}
+async function scarica(id){const l=S.lot.find(x=>x.id==id);saveLot(id,1);const R=l.ingr.map(i=>{const m=S.mag.find(m=>m.nome.toLowerCase()==i.n.toLowerCase()&&m.lotto==i.lf);return{i,m,q:m?conv(i.q,i.u,m.u):null}});
+const bad=R.filter(r=>!r.m||r.q==null||r.q>r.m.q);
+if(bad.length)return alert('Scarico bloccato, verifica:\n'+bad.map(r=>'• '+r.i.n+(r.m?' (giacenza insufficiente o unità non compatibile)':' (lotto fornitore non trovato in magazzino)')).join('\n'));
+if(await ask('Riepilogo scarico:\n'+R.map(r=>`${r.i.n} · lotto ${r.i.lf} · scarico ${nf(r.q)} ${r.m.u} · giacenza ${nf(r.m.q)} ${r.m.u}`).join('\n')+'\n\nConfermi?')){R.forEach(r=>r.m.q=Math.round((r.m.q-r.q)*1e6)/1e6);l.scaricato=true;save();render()}}
+function abbList(q){q=q.toLowerCase();return S.abb.filter(a=>(a.prodotto+' '+a.code).toLowerCase().includes(q)).slice().reverse().map(a=>`<div class="c"><b>${e(a.code)}</b> ${e(a.prodotto)}<div class="s">${a.tipo} · ${df(a.data)} · ${nf(a.temp)} °C · ${e(a.op)}</div><button class="g" onclick="prAbb('${a.id}')">Stampa etichetta</button><button class="g" style="color:#b3402a;border-color:#b3402a" onclick="delAbb('${a.id}')">Elimina</button></div>`).join('')||'<p class="s">Nessuna scheda trovata.</p>'}
+function fa(){$('#al').innerHTML=abbList(val('q'))}
+function pick(){const l=S.lot.find(x=>x.code==val('al'));$('#ap').value=l?l.nome:''}
+function saveAbb(){const l=S.lot.find(x=>x.code==val('al'));if(!l)return alert('Seleziona un lotto esistente.');if(val('atp')==='')return alert('Inserisci la temperatura.');
+S.abb.push({id:uid(),lotId:l.id,code:l.code,prodotto:l.nome,tipo:val('at'),data:val('ad'),temp:+val('atp'),op:val('ao')});save();go('home')}
+function prAbb(id){const a=S.abb.find(x=>x.id==id);pr(`<h2>Scheda di abbattimento</h2><p>Prodotto: <b>${e(a.prodotto)}</b><br>Lotto personale: <b>${e(a.code)}</b><br>Tipo: ${a.tipo}<br>Data: ${df(a.data)}<br>Temperatura: ${nf(a.temp)} °C<br>Operatore: ${e(a.op)}</p>`,'Abbattimento '+a.code)}
+function saveMag(){if(!val('mn').trim()||!(+val('mq')>0))return alert('Inserisci materia prima e quantità.');
+S.mag.push({id:uid(),nome:val('mn').trim(),forn:val('mf'),q:+val('mq'),u:val('mu'),lotto:val('ml').trim(),carico:val('mc'),scad:val('ms'),prezzo:+val('mp')||0});save();go('mag')}
+function bk(){try{const b=new Blob([JSON.stringify(S)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='fresh-pasta-lab-'+td()+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1500)}catch(x){alert('Salvataggio non riuscito.')}}
+function rs(i){const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=async()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.ric)||!Array.isArray(d.lot))throw 0;if(await ask('Sostituire i dati attuali con quelli del file?')){S=Object.assign({ric:[],lot:[],abb:[],mag:[]},d);save();render()}}catch(x){alert('File non valido.')}};r.readAsText(f)}
+(function(){try{const c=document.createElement('canvas');c.width=c.height=180;const z=c.getContext('2d');z.fillStyle='#172D28';z.fillRect(0,0,180,180);z.translate(30,30);z.scale(5,5);z.strokeStyle='#D7B77A';z.lineWidth=1.6;z.lineCap=z.lineJoin='round';z.stroke(new Path2D('M12 21V8M12 8c-2-.5-3-2-3-4 2 .5 3 2 3 4zM12 8c2-.5 3-2 3-4-2 .5-3 2-3 4zM12 13c-2-.5-3.5-2-3.5-4 2 .5 3.5 2 3.5 4zM12 13c2-.5 3.5-2 3.5-4-2 .5-3.5 2-3.5 4zM12 18c-2-.5-3.5-2-3.5-4 2 .5 3.5 2 3.5 4zM12 18c2-.5 3.5-2 3.5-4-2 .5-3.5 2-3.5 4z'));const l=document.createElement('link');l.rel='apple-touch-icon';l.href=c.toDataURL('image/png');document.head.appendChild(l)}catch(z){}})();
+render();
+</script></body></html>
